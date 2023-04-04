@@ -4,10 +4,13 @@ import jdk.internal.util.ArraysSupport;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+
 
 public class MyList<E> {
+    private static final Object[] EMPTY_ELEMENTDATA = {};
     private int size = 0;
-    private static final int DEFAULT_CAPACITY =  10;
+    private static final int DEFAULT_CAPACITY = 10;
     private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
     private Object elements[];
 
@@ -22,6 +25,7 @@ public class MyList<E> {
     public MyList() {
         this.elements = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
     }
+
     public MyList(int capacity) {
         if (capacity > 0) {
             this.elements = new Object[DEFAULT_CAPACITY];
@@ -31,11 +35,13 @@ public class MyList<E> {
             throw new IllegalArgumentException("Illegal parameter");
         }
     }
+
     private void rangeCheckException(int index) {
-        if (index < 0  || index > size) {
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException("Index outof bound");
         }
     }
+
     private void grow(int minCapacity) {
         int oldCapacity = this.elements.length;
         if (oldCapacity > 0 || elements != DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
@@ -47,6 +53,7 @@ public class MyList<E> {
             elements = new Object[Math.max(DEFAULT_CAPACITY, minCapacity)];
         }
     }
+
     public void add(int index, E element) {
         try {
             rangeCheckException(index);
@@ -57,17 +64,19 @@ public class MyList<E> {
             //Shift element from index to right
             System.arraycopy(this.elements, index, this.elements, index + 1, size - index);
             this.elements[index] = element;
-            this.size ++;
-        }catch (Exception e) {
+            this.size++;
+        } catch (Exception e) {
             System.out.println("Exception add");
         }
     }
+
     private void fastRemove(Object[] es, int i) {
         final int newSize;
         if ((newSize = size - 1) > i)
             System.arraycopy(es, i + 1, es, i, newSize - i);
         es[size = newSize] = null;
     }
+
     public E remove(int index) {
         if (index < 0 || index >= this.size) {
             throw new IndexOutOfBoundsException("Outbound" +
@@ -85,5 +94,32 @@ public class MyList<E> {
                 "size=" + size +
                 ", elements=" + Arrays.toString(elements) +
                 '}';
+    }
+
+//    @Override
+//    public Object clone() throws CloneNotSupportedException {
+//        return super.clone();
+//    }
+
+    public MyList(Collection<? extends E> c) {
+        Object[] a = c.toArray();
+        if ((size = a.length) != 0) {
+            if (c.getClass() == ArrayList.class) {
+                elements = a;
+            } else {
+                elements = Arrays.copyOf(a, size, Object[].class);
+            }
+        } else {
+            // replace with empty array.
+            elements = EMPTY_ELEMENTDATA;
+        }
+    }
+
+    public Object clone() throws CloneNotSupportedException {
+//        MyList<?> v = (MyList<?>) super.clone();
+        MyList<?> v = new MyList<>(size);
+        v.elements = Arrays.copyOf(elements, size);
+        return v;
+
     }
 }
