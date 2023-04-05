@@ -30,19 +30,27 @@ public class Main {
 
         //
         ArrayList<Animal> animalList = new ArrayList<>();
-        animalList.add(new Animal("lion"));
-        animalList.add(new Animal("tiger"));
-        animalList.add(new Dog("Lina"));
+        animalList.add(new Animal("lion",1));
+        animalList.add(new Animal("tiger",2));
+//        animalList.add(new Dog("Lina",3));
 
 // Create a collection of Animals or any subclass of Animal
         ArrayList<? extends Animal> animals = animalList;
-        animalList.add(new Animal("cat"));
+        animalList.add(new Animal("cat",3));
 //        animals.add(new Animal("chicken"));
         for (Animal animal : animals) {
             System.out.println(animal.getName());
         }
         System.out.println(animals);
         System.out.println(animalList);
+        animalList.set(1, new Animal("horse",3));
+
+        Animal editAnimal = animalList.get(1);
+        System.out.println(editAnimal.hashCode());
+//        editAnimal.setName("horse");
+        System.out.println(animalList);
+
+        System.out.println(animalList.indexOf(new Animal("cat",3)));
     }
 
 }
